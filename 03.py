@@ -2,15 +2,15 @@ class Figure:
     sides_count = 0
 
     def __init__(self, color=(0, 0, 0), *sides, filled=False):
-        self.__sides = self.__get_sides_count(sides)
+        self.__sides = self.__set_sides_count(sides)
         self.__color = color
         self._filled = filled
 
-    def __get_sides_count(self, *sides):
-        if self.sides_count == len(sides):
-            return sides
-        else:
+    def __set_sides_count(self, *sides):
+        if len(sides[0]) > 1:
             return [1 for _ in range(self.sides_count)]
+        else:
+            return [sides[0][0] for _ in range(self.sides_count)]
 
     def get_color(self):
         return self.__color
@@ -35,6 +35,9 @@ class Figure:
         if sides_tmp:
             self.__sides = sides_tmp
 
+    def get_sides(self):
+        return self.__sides
+
     def __is_valid_sides(self, *sides):
         return all((map(lambda a: a > 0, *sides))) and self.sides_count == len(sides)
 
@@ -43,16 +46,42 @@ class Figure:
 
 
 class Circle(Figure):
-    pass
+    sides_count = 1
 
 
 class Triangle(Figure):
-    pass
+    sides_count = 3
 
 
 class Cube(Figure):
-    pass
+    sides_count = 12
+
+    def get_volume(self):
+        return self.get_sides()[0] ** 3
 
 
-circle1 = Circle((200, 200, 100), 10)
-cube1 = Cube((222, 35, 130), 6)
+circle1 = Circle((200, 200, 100), 10)  # (Цвет, стороны)
+cube1 = Cube((222, 35, 130), 12)
+triangle1 = Triangle((222, 35, 130), 7, 4, 6)
+print(cube1.get_sides())
+print(circle1.get_sides())
+print(triangle1.get_sides())
+print(cube1.get_volume())
+
+# # Проверка на изменение цветов:
+# circle1.set_color(55, 66, 77)  # Изменится
+# cube1.set_color(300, 70, 15)  # Не изменится
+# print(circle1.get_color())
+# print(cube1.get_color())
+#
+# # Проверка на изменение сторон:
+# cube1.set_sides(5, 3, 12, 4, 5)  # Не изменится
+# circle1.set_sides(15)  # Изменится
+# print(cube1.get_sides())
+# print(circle1.get_sides())
+#
+# # Проверка периметра (круга), это и есть длина:
+# print(len(circle1))
+#
+# # Проверка объёма (куба):
+# print(cube1.get_volume())
